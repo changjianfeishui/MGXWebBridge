@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=decive-width,initial-scale=1.0,maximum-scale=3.0,user-scalable=no">
+    <title>混合开发通信测试</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body,input{
+            font-size: .4em;
+            font-family: "Arial", "Microsoft YaHei", "SimSun";
+        }
+        .callHanlder{
+            margin: 0 10px 40px 10px;
+        }
+        .hd{
+            font-size: 3.5em;
+            color: #E23939;
+        }
+        .row-input{
+            padding: 8px 0;
+        }
+        .row-t{
+            padding: 5px 0;
+            color: #9E9C9C;
+        }
+        .input{
+            height: 24px;
+            width: 39%;
+            margin: 0 10px;
+        }
+        .btn{
+            height: 28px;
+            display: inline-block;
+        }
+        .sel{
+            height: 28px;
+            line-height: 28px;
+            margin-right: 5px;
+        }
+        .resutl{
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #EFEDED;
+        }
+        .table{
+            text-align: center;
+            line-height: 1.7em;
+        }
+        .table,.table td,.table th,.table tr{
+            border-color: #CAC6C6;
+        }
+        .example{
+            font-size: 2.1em;
+            line-height: 1.5em;
+            padding: 10px;
+            background: #E8E8E8;
+            margin-bottom: 13px;
+        }
+    </style>
+    <script src="mLibs.js"></script>
+</head>
+<body>
+<div class="callHanlder">
+    <p class="hd">liveCallHanlder方法测试</p>
+    <p class="example">window.liveCallHanlder(object);如:<br>
+        window.liveCallHanlder({<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;type:1,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;fc:'ROOM_EVENT_smr',<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;data:{name:'yxf',add:'beiji'},<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;callBack:'liveHanlderResult.guardList'<br>
+        })
+    </p>
+    
+    <p><br>{"type":1,"fc":"ROOM_EVENT_smr","data":{"name":"yxf","add":"beiji"},"callBack":"liveHanlderResult.guardList"}</p>
+    <p class="row-input">调用参数:<input id="callParam" class="input" value='{"type":1,"fc":"ROOM_EVENT_smr","data":{"name":"yxf","add":"beiji"},"callBack":"liveHanlderResult.guardList"}' placeholder="请输入json参数"><button id="sendHanld" class="btn">发送</button></p>
+    <p class="row-t">显示返回数据</p>
+    <p class="resutl" id="liveHanlder">.......</p>
+</div>
+
+<div class="callHanlder">
+    <p class="hd">liveAjax方法测试</p>
+    <p class="example">window.liveAjax(url,params);如: <br>
+        window.liveAjax(<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;isAuth:1,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url:'/xiuba-proxy-web/broad/guardList',<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type:'post',<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callBack:'liveAjaxResult.guardList',<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data:{roomId:999854}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+        )
+    </p>
+   
+    <p class="row-input">
+        调用参数:<br><br>
+        {"url":"/xiuba-proxy-web/broad/guardList","isAuth":1,"type":"post","callBack":"liveAjaxResult.guardList","data":{"bdId":999854}}<br>
+        <input id="ajaxParam" value='{"url":"/xiuba-proxy-web/broad/guardList","isAuth":1,"type":"post","callBack":"liveAjaxResult.guardList","data":{"bdId":999854}}' class="input" placeholder="请输入json参数"><br><br>
+        <button class="btn" id="sendAjax" style="margin-left: 10px;">发送</button>
+    </p>
+    <p class="row-t">显示返回数据</p>
+    <p class="resutl" id="liveAjax">.......</p>
+</div>
+
+<script>
+    //app调用返回
+    var liveHanlderResult = {
+        guardList:function(data){
+<!--            alert(data);-->
+            $('#liveHanlder').html(JSON.stringify(data));
+        }
+    };
+    //ajax调用返回
+    var liveAjaxResult = {
+        guardList:function(data){
+            alert(data);
+            $('#liveAjax').html(JSON.stringify(data));
+        }
+    };
+
+    //app数据
+    $('#sendHanld').click(function(){
+        if(!$('#callParam').val()){
+            return false;
+        }
+        liveCallHanlder(JSON.parse($('#callParam').val()));
+    });
+
+    //ajax数据
+    $('#sendAjax').click(function(){
+        if(!$('#ajaxParam').val()){
+            return false;
+        }
+        liveAjax(JSON.parse($('#ajaxParam').val()));
+    })
+</script>
+</body>
+</html>
