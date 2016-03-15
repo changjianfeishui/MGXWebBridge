@@ -2,6 +2,7 @@
 
 项目中涉及到ObjC与JavaScript交互,于是封装了一个简单的`XBWebBridge`.
 
+[个人博客链接](coderzhang.xyz)
 
 ## 使用方法
 
