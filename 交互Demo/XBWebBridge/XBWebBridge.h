@@ -28,7 +28,12 @@
  *  @param param 参数
  */
 - (void)callJavaScriptWithFunctionName:(NSString *)fn param:(id)param;
-
+/**
+ *  当webView完成加载后要ObjC主动去调用的JavaScript方法
+ *
+ *  @param fn
+ */
+- (void)callJavaScriptFunctionWhenWebViewFinishLoadWithFunctionName:(NSString *)fn param:(id)param;
 /**
  *  接收到的JS数据
  *  @param reslut JS返回结果

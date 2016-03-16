@@ -13,7 +13,8 @@
 @property (nonatomic,weak) UIWebView  *webView; /**< */
 @property (nonatomic,strong) NSMutableArray  *fns; /**< */
 
-
+@property (nonatomic,copy) NSString  *loadedFn; /**<      webview加载完成后调用的fn*/
+@property (nonatomic,strong) id loadedParam; /**< webview加载完成后调用的fn的参数*/
 @end
 
 @implementation XBWebBridge
@@ -39,6 +40,8 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [self setupBridgeWithNativeFunctionName];
+    [self callJavaScriptWithFunctionName:self.loadedFn param:self.loadedParam];
+
 }
 
 #pragma - mark Public Method
@@ -47,7 +50,6 @@
     JSContext  *context = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     __weak typeof(self) weakSelf = self;
     //注册给JS调用的方法,用来接收JS传递过来的参数
-    
     for (int i = 0; i < self.fns.count; i++) {
         NSString *fn = self.fns[i];
         context[fn] = ^() {
@@ -60,21 +62,26 @@
             }
         };
     }
-    
-    
+}
 
+- (void)callJavaScriptFunctionWhenWebViewFinishLoadWithFunctionName:(NSString *)fn param:(id)param
+{
+    self.loadedFn = fn;
+    self.loadedParam = param;
 }
 
 - (void)callJavaScriptWithFunctionName:(NSString *)fn param:(id)param
 {
-    NSAssert([NSJSONSerialization isValidJSONObject:param], @"参数不能JSON序列化");
-    
-    NSData *jsondata = [NSJSONSerialization dataWithJSONObject:param options:0 error:nil];
-    NSString *jsonString = [[NSString alloc]initWithData:jsondata encoding:NSUTF8StringEncoding];
-    
+    NSString *jsStr;
     JSContext  *context = [self.webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-    
-    NSString *jsStr = [NSString stringWithFormat:@"%@(%@)",fn,jsonString];
+    if (!param) {
+        jsStr = [NSString stringWithFormat:@"%@()",fn];
+    }else{
+        NSAssert([NSJSONSerialization isValidJSONObject:param], @"参数不能JSON序列化");
+        NSData *jsondata = [NSJSONSerialization dataWithJSONObject:param options:0 error:nil];
+        NSString *jsonString = [[NSString alloc]initWithData:jsondata encoding:NSUTF8StringEncoding];
+        jsStr = [NSString stringWithFormat:@"%@(%@)",fn,jsonString];
+    }
     [context evaluateScript:jsStr];
 }
 
