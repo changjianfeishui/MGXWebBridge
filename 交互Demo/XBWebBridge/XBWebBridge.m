@@ -54,12 +54,18 @@
         NSString *fn = self.fns[i];
         context[fn] = ^() {
             NSArray *args = [JSContext currentArguments];
-            for (JSValue *jsVal in args) {
-                NSDictionary * dic = [jsVal toDictionary];
+            if (args.count == 0) {
                 if (weakSelf.handleResultDictionary) {
-                    weakSelf.handleResultDictionary(dic,fn);
+                    weakSelf.handleResultDictionary(nil,fn);
                 }
-            }
+            }else{
+                for (JSValue *jsVal in args) {
+                    NSDictionary * dic = [jsVal toDictionary];
+                    if (weakSelf.handleResultDictionary) {
+                        weakSelf.handleResultDictionary(dic,fn);
+                    }
+                }
+            }      
         };
     }
 }
