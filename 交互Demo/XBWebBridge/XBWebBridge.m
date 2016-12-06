@@ -18,7 +18,11 @@
 @end
 
 @implementation XBWebBridge
-
+- (void)dealloc
+{
+    self.webView.delegate = nil;
+    [self.webView stopLoading];
+}
 - (instancetype)initWithWebView:(UIWebView *)webView
 {
     if (self = [super init]) {
