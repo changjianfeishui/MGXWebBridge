@@ -31,16 +31,15 @@
     
     __weak typeof(self) weakSelf = self;
     self.bridge = [[XBWebBridge alloc]initWithWebView:self.webView];
-    [self.bridge registerObjcFunctionforJavaScriptWithFunctionName:@"liveCallHanlder"];
-    [self.bridge registerObjcFunctionforJavaScriptWithFunctionName:@"liveAjax"];
+    [self.bridge registerObjcFunctionforJavaScript:@"liveCallHanlder" isNeedReturn:NO];
+    [self.bridge registerObjcFunctionforJavaScript:@"liveAjax" isNeedReturn:NO];
 
-    self.bridge.handleResultDictionary = ^(NSDictionary *result,NSString *registerFunctionName){
+    self.bridge.JSCallHandlerNoReturn = ^(NSArray *args,NSString *registerFunctionName){
         if ([registerFunctionName isEqualToString:@"liveCallHanlder"]) {
-            NSLog(@"liveCallHanlder === %@",result);
+            NSLog(@"liveCallHanlder === %@",args);
         }else{
-            NSLog(@"liveAjax === %@",result);
+            NSLog(@"liveAjax === %@",args);
         }
-        weakSelf.callBack = result[@"callBack"];
     };
 }
 
@@ -54,8 +53,8 @@
                             @"friends":@[@"han",@"li"]
                             
                             };
-    [self.bridge callJavaScriptWithFunctionName:self.callBack param:param];
 
+    [self.bridge callJavaScriptFunction:@"liveAjaxResult.guardList" param:param];
 }
 
 
