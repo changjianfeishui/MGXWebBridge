@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'MGXWebBridge_Example' do
+  pod 'MGXWebBridge', :path => '../'
+
+  target 'MGXWebBridge_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

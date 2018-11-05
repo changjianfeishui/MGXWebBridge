@@ -1,0 +1,16 @@
+PODS:
+  - MGXWebBridge (0.1.0)
+
+DEPENDENCIES:
+  - MGXWebBridge (from `../`)
+
+EXTERNAL SOURCES:
+  MGXWebBridge:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  MGXWebBridge: bb0a1ec6ecf70b125e7e83aaa23a28ff6bec261e
+
+PODFILE CHECKSUM: 344c7f1038e76c046565695b2681efab56c5001c
+
+COCOAPODS: 1.5.3

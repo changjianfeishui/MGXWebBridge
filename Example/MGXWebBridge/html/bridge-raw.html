@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=decive-width,initial-scale=1.0,maximum-scale=3.0,user-scalable=no">
+    <title>混合开发通信测试</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body,input{
+            font-size: .4em;
+            font-family: "Arial", "Microsoft YaHei", "SimSun";
+        }
+        .callHanlder{
+            margin: 0 10px 40px 10px;
+        }
+        .hd{
+            font-size: 3.5em;
+            color: #E23939;
+        }
+        .row-input{
+            padding: 8px 0;
+        }
+        .row-t{
+            padding: 5px 0;
+            color: #9E9C9C;
+        }
+        .input{
+            height: 24px;
+            width: 39%;
+            margin: 0 10px;
+        }
+        .btn{
+            height: 28px;
+            display: inline-block;
+        }
+        .sel{
+            height: 28px;
+            line-height: 28px;
+            margin-right: 5px;
+        }
+        .resutl{
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #EFEDED;
+        }
+        .table{
+            text-align: center;
+            line-height: 1.7em;
+        }
+        .table,.table td,.table th,.table tr{
+            border-color: #CAC6C6;
+        }
+        .example{
+            font-size: 2.1em;
+            line-height: 1.5em;
+            padding: 10px;
+            background: #E8E8E8;
+            margin-bottom: 13px;
+        }
+    </style>
+    <script src="mLibs.js"></script>
+</head>
+<body>
+<div class="callHanlder">
+    <p class="hd">调用Objc方法测试</p>
+    
+    <p class="row-input">调用参数:<input id="callParam" class="input" value='{"type":1,"fc":"callTest","data":{"name":"yxf","add":"beiji"},"state":"1"}' placeholder="请输入json参数"><button id="sendHanld" class="btn">发送</button></p>
+</div>
+
+
+<div class="callHanlder">
+    <p class="hd">调用JS方法测试</p>
+        <p class="row-t">显示调用JS的参数</p>
+        <p class="resutl" id="liveAjax">.......</p>
+</div>
+
+
+
+<script>
+    //app数据
+    $('#sendHanld').click(function(){
+        if(!$('#callParam').val()){
+            return false;
+        }
+        var result = liveCallHanlder(JSON.parse($('#callParam').val()));
+                          alert(result);
+    });
+    //ajax调用返回
+    var ajaxResult = {
+        list:function(data){
+            alert(data);
+            $('#liveAjax').html(JSON.stringify(data));
+        }
+    };
+
+</script>
+</body>
+</html>

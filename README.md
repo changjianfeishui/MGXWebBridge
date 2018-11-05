@@ -1,41 +1,58 @@
-# 一个简单的ObjC与JavaScript交互封装
+# MGXWebBridge
 
-项目中涉及到ObjC与JavaScript交互,于是封装了一个简单的`XBWebBridge`.
+[![CI Status](https://img.shields.io/travis/329735967@qq.com/MGXWebBridge.svg?style=flat)](https://travis-ci.org/329735967@qq.com/MGXWebBridge)
+[![Version](https://img.shields.io/cocoapods/v/MGXWebBridge.svg?style=flat)](https://cocoapods.org/pods/MGXWebBridge)
+[![License](https://img.shields.io/cocoapods/l/MGXWebBridge.svg?style=flat)](https://cocoapods.org/pods/MGXWebBridge)
+[![Platform](https://img.shields.io/cocoapods/p/MGXWebBridge.svg?style=flat)](https://cocoapods.org/pods/MGXWebBridge)
 
-[个人博客链接](http://devzhang.cn)
+## Example
 
-## 使用方法
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-* 1.导入`JavaScriptCore.framework`
-* 2.导入`XBWebBridge.h`
-* 3.创建`XBWebBridge`对象
-	
-	    self.bridge = [[XBWebBridge alloc]initWithWebView:self.webView];
-	    
-* 4.注册给JS调用的方法(JS中通过注册使用的方法名调用ObjC):
+## Usage
+JS to Objc:
 
-		[self.bridge registerObjcFunctionforJavaScriptWithFunctionName:@"liveCallHanlder"];
-		[self.bridge registerObjcFunctionforJavaScriptWithFunctionName:@"liveAjax"];
-
-* 5.处理JS传递到ObjC的参数:
-
-	    __weak typeof(self) weakSelf = self;
-	    self.bridge.handleResultDictionary = ^(NSDictionary *result,NSString *registerFunctionName){
-        if ([registerFunctionName isEqualToString:@"liveCallHanlder"]) {
-            NSLog(@"liveCallHanlder === %@",result);
-        }else{
-            NSLog(@"liveAjax === %@",result);
+```
+    self.bridge = [[MGXWebBridge alloc]initWithWebView:self.webView];
+    [self.bridge registerObjcFuncForJS:@"liveCallHanlder"];
+    __weak typeof(self) weakSelf = self;
+    self.bridge.JSHander = ^id(NSString * _Nonnull funcName, NSArray * _Nonnull params) {
+        NSLog(@"%@===%@",funcName,params);
+        if ([funcName isEqualToString:@"liveCallHanlder"]) {
+            return [weakSelf liveCallHanlder];
         }
-        weakSelf.callBack = result[@"callBack"];
+        return nil;
     };
 
-* 6.Objc调用JS方法:
+```
 
-	    NSDictionary *param = @{
+Objc to JS: 
+
+```
+    NSDictionary *param = @{
                             @"name":@"lilei",
                             @"age":@"13",
                             @"sex":@"1",
                             @"friends":@[@"han",@"li"]
-                            
                             };
-   		[self.bridge callJavaScriptWithFunctionName:self.callBack param:param];
+    //support param type: NSString , NSArray, NSDictionary
+    [self.bridge invokeJSFunc:@"ajaxResult.list" params:param];
+```
+
+
+## Requirements
+iOS 7.0
+
+## Installation
+
+MGXWebBridge is available through [CocoaPods](https://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod 'MGXWebBridge'
+```
+
+
+## License
+
+MGXWebBridge is available under the MIT license. See the LICENSE file for more info.
